@@ -1,0 +1,7 @@
+namespace ariel
+{
+    class Algorithms
+    {
+
+    };
+}
