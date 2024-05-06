@@ -10,28 +10,13 @@ void ariel::Graph::loadGraph(std::vector<std::vector<int>> matrix)
         }
     }
 
-    for (std::size_t i = 0; i < matrix.size(); i++)
+    for (int i = 0; i < matrix.size(); i++)
     {
-        for (std::size_t j = 0; j < matrix[i].size(); j++)
+        this->_vertexs.insert(i);
+
+        for (int j = 0; j < matrix[i].size(); j++)
         {
-            this->_graph[i][j] = matrix[i][j];
+            this->_vertexs.insert({(i, j), matrix[i][j]});
         }
     }
-}
-
-void ariel::Graph::printGraph()
-{
-    int edges = 0;
-    for (std::size_t i = 0; i < this->_graph.size(); i++)
-    {
-        for (std::size_t j = 0; j < this->_graph[i].size(); j++)
-        {
-            if (this->_graph[i][j] != 0 && this->_graph[j][i] != 0)
-            {
-                edges++;
-            }
-        }
-    }
-
-    std::cout << "Graph with " << this->_graph[0].size() << " vertices and " << edges << " edges." << std::endl;
 }

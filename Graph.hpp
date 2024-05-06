@@ -2,22 +2,24 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
+#include <map>
 
 namespace ariel
 {
     class Graph
     {
         private:
-            std::vector<std::vector<int>> _graph;
-            bool _isWeighted;
-            bool _isDirected;
+            std::set<int> _vertexs;
+            std::map<std::pair<int, int>, int> _edges;
 
         public:
             void loadGraph(std::vector<std::vector<int>>);
-            void printGraph();
+            void printGraph() {std::cout << "Graph with " << this->_vertexs.size() << " vertices and " << this->_edges.size() << " edges." << std::endl;};
 
-            bool isWeighted() {return this->_isWeighted;}
-            bool isDirected() {return this->_isDirected;}
+            std::set<int> getVertexs() {return this->_vertexs;}
+            std::map<std::pair<int, int>, int> getEdges() {return this->_edges;}
 
+            int getVertexsSize() {return this->_vertexs.size();}
     };
 }
