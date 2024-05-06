@@ -3,13 +3,32 @@
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 {
     std::vector<int> distanceList, parentList;
-    if(BellmanFord(g, start, distanceList, parentList))
+    if (BellmanFord(g, start, distanceList, parentList))
     {
         std::string path = std::to_string(parentList[end]);
         for (std::size_t i = parentList[end]; i < start; i++)
         {
             path += ">-" + parentList[i];
         }
+        return path;
+    }
+    return "-1";
+}
+
+std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
+{
+    std::vector<int> distanceList, parentList;
+    if (!BellmanFord(g, 0, distanceList, parentList))
+    {
+        std::string path = "";
+        for (std::size_t i = g.getVertexsSize() - 1; i <= 0; i++)
+        {
+            for (std::size_t j = g.getVertexsSize() - 1; j <= 0; j++)
+            {
+                path += ">-" + parentList[i];
+            }
+        }
+
         return path;
     }
     return "-1";
@@ -29,7 +48,7 @@ bool ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vector<int> 
     for (int i : g.getVertexs())
     {
         distanceList[i] = __INT_MAX__;
-        parentList[i] = -1; //remember to change
+        parentList[i] = -1; // remember to change
     }
 
     distanceList[start] = 0;

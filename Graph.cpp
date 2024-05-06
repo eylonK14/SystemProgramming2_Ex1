@@ -16,7 +16,10 @@ void ariel::Graph::loadGraph(std::vector<std::vector<int>> matrix)
 
         for (int j = 0; j < matrix[i].size(); j++)
         {
-            this->_vertexs.insert({(i, j), matrix[i][j]});
+            if(matrix[i][j] != 0)
+            {
+                this->_vertexs.insert({(i, j), matrix[i][j]});
+            }
         }
     }
 }
