@@ -1,5 +1,20 @@
 #include "Algorithms.hpp"
 
+std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
+{
+    std::vector<int> distanceList, parentList;
+    if(BellmanFord(g, start, distanceList, parentList))
+    {
+        std::string path = std::to_string(parentList[end]);
+        for (std::size_t i = parentList[end]; i < start; i++)
+        {
+            path += ">-" + parentList[i];
+        }
+        return path;
+    }
+    return "-1";
+}
+
 void ariel::Algorithms::relax(std::pair<std::pair<int, int>, int> edge, std::vector<int> distanceList, std::vector<int> parentList)
 {
     if (distanceList[edge.first.first] > distanceList[edge.first.second] + edge.second)
