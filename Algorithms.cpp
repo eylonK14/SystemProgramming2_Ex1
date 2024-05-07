@@ -3,13 +3,15 @@
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 {
     std::vector<int> distanceList, parentList;
-    if (BellmanFord(g, start, distanceList, parentList))
+    if (BellmanFord(g, start, distanceList, parentList).compare("There are no negative cycles in the graph."))
     {
         std::string path = std::to_string(parentList[end]);
         for (std::size_t i = parentList[end]; i < start; i++)
         {
             path += ">-" + parentList[i];
         }
+
+        std::reverse(path.begin(), path.end());
         return path;
     }
     return "-1";
@@ -18,20 +20,15 @@ std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
 {
     std::vector<int> distanceList, parentList;
-    if (!BellmanFord(g, 0, distanceList, parentList))
-    {
-        std::string path = "";
-        for (std::size_t i = g.getVertexsSize() - 1; i <= 0; i++)
-        {
-            for (std::size_t j = g.getVertexsSize() - 1; j <= 0; j++)
-            {
-                path += ">-" + parentList[i];
-            }
-        }
+    std::string bellmanFord = BellmanFord(g, 0, distanceList, parentList);
 
-        return path;
+    if(bellmanFord.compare("There are no negative cycles in the graph.") == 0)
+    {
+        return bellmanFord;
     }
-    return "-1";
+
+    std::reverse(bellmanFord.begin(), bellmanFord.end());
+    return bellmanFord;
 }
 
 void ariel::Algorithms::relax(std::pair<std::pair<int, int>, int> edge, std::vector<int> distanceList, std::vector<int> parentList)
@@ -43,12 +40,12 @@ void ariel::Algorithms::relax(std::pair<std::pair<int, int>, int> edge, std::vec
     }
 }
 
-bool ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vector<int> distanceList, std::vector<int> parentList)
+std::string ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vector<int> distanceList, std::vector<int> parentList)
 {
     for (int i : g.getVertexs())
     {
         distanceList[i] = __INT_MAX__;
-        parentList[i] = -1; // remember to change
+        parentList[i] = -1;
     }
 
     distanceList[start] = 0;
@@ -65,9 +62,21 @@ bool ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vector<int> 
     {
         if (distanceList[edge.first.first] > distanceList[edge.first.second] + edge.second)
         {
-            return false;
+            int father = edge.first.first;
+            std::string path = "";
+            path += father;
+
+            std::size_t i = parentList[father - 1];
+
+            while (i != father)
+            {
+                path += ">-" + parentList[i];
+                i = parentList[i];
+            }
+
+            return path;
         }
     }
 
-    return true;
+    return "There are no negative cycles in the graph.";
 }
