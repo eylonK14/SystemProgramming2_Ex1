@@ -1,28 +1,57 @@
 #include "Algorithms.hpp"
 
+bool ariel::Algorithms::isConnected(ariel::Graph g)
+{
+    return true;
+}
+
+std::string ariel::Algorithms::isContainsCycle(ariel::Graph g)
+{
+    return "";
+}
+
+std::string ariel::Algorithms::isBipartite(ariel::Graph g)
+{
+    return "";
+}
+
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 {
-    std::vector<std::size_t> distanceList, parentList;
-    if (BellmanFord(g, start, distanceList, parentList).compare("There are no negative cycles in the graph."))
+    std::size_t s = static_cast<std::size_t>(start);
+    std::size_t e = static_cast<std::size_t>(end);
+
+    std::vector<std::size_t> parentList;
+    std::vector<int> distanceList;
+
+    std::string Bellmanford = BellmanFord(g, s, distanceList, parentList);
+
+    if (Bellmanford.compare("There are no negative cycles in the graph.") == 0)
     {
-        std::string path = std::to_string(parentList[end]);
-        for (std::size_t i = parentList[end]; i < start; i++)
+        std::string path = std::to_string(e);
+        for (std::size_t i = parentList[e]; i >= start && i != __INT_MAX__;)
         {
-            path += ">-" + parentList[i];
+            path += ">-";
+            path += std::to_string(i);
+            i = parentList[i];
         }
 
         std::reverse(path.begin(), path.end());
-        return path;
+        if (path[0] == (char)(start + '0'))
+        {
+            return path;
+        }
+        return "-1";
     }
     return "-1";
 }
 
 std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
 {
-    std::vector<std::size_t> distanceList, parentList;
+    std::vector<std::size_t> parentList;
+    std::vector<int> distanceList;
     std::string bellmanFord = BellmanFord(g, 0, distanceList, parentList);
 
-    if(bellmanFord.compare("There are no negative cycles in the graph.") == 0)
+    if (bellmanFord.compare("There are no negative cycles in the graph.") == 0)
     {
         return bellmanFord;
     }
@@ -31,26 +60,27 @@ std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
     return bellmanFord;
 }
 
-void ariel::Algorithms::relax(std::pair<std::pair<std::size_t, std::size_t>, int> edge, std::vector<std::size_t> distanceList, std::vector<std::size_t> parentList)
+void ariel::Algorithms::relax(std::pair<std::pair<std::size_t, std::size_t>, int> edge, std::vector<int> &distanceList, std::vector<std::size_t> &parentList)
 {
-    if (distanceList[edge.first.first] > distanceList[edge.first.second] + edge.second)
+    if (distanceList[edge.first.second] > distanceList[edge.first.first] + edge.second)
     {
-        distanceList[edge.first.first] = distanceList[edge.first.second] + edge.second;
-        parentList[edge.first.first] = edge.first.second;
+        distanceList[edge.first.second] = distanceList[edge.first.first] + edge.second;
+        parentList[edge.first.second] = edge.first.first;
     }
 }
 
-std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, std::vector<std::size_t> distanceList, std::vector<std::size_t> parentList)
+std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, std::vector<int> &distanceList, std::vector<std::size_t> &parentList)
 {
-    for (std::size_t i : g.getVertexs())
+    for (long i = 0; i < g.getVertexs().size(); i++)
     {
-        distanceList[i] = __INT_MAX__;
-        parentList[i] = -1;
+        distanceList.insert(distanceList.begin() + i, __INT_MAX__);
+        parentList.insert(parentList.begin() + i, __INT_MAX__);
     }
 
     distanceList[start] = 0;
+    std::cout << distanceList[start] << std::endl;
 
-    for (std::size_t i = 0; i < g.getVertexsSize(); i++)
+    for (std::size_t i = 0; i < g.getVertexsSize() - 1; i++)
     {
         for (const auto &edge : g.getEdges())
         {
@@ -60,17 +90,16 @@ std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, st
 
     for (const auto &edge : g.getEdges())
     {
-        if (distanceList[edge.first.first] > distanceList[edge.first.second] + edge.second)
+        if (distanceList[edge.first.second] > distanceList[edge.first.first] + edge.second)
         {
-            int father = edge.first.first;
-            std::string path = "";
-            path += father;
-
-            std::size_t i = parentList[father - 1];
+            std::size_t father = edge.first.first;
+            std::string path = std::to_string(father);
+            std::size_t i = parentList[father];
 
             while (i != father)
             {
-                path += ">-" + parentList[i];
+                path += ">-";
+                path += std::to_string(parentList[i]);
                 i = parentList[i];
             }
 

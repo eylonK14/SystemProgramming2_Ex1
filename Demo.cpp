@@ -22,7 +22,7 @@ int main()
         {0, 1, 0}};
     try
     {
-        g.loadGraph(graph, false); // Load the graph to the object.
+        g.loadGraph(graph); // Load the graph to the object.
     }
     catch (const std::exception &e)
     {
@@ -45,7 +45,7 @@ int main()
 
     try
     {
-        g.loadGraph(graph2, true); // Load the graph to the object.
+        g.loadGraph(graph2); // Load the graph to the object.
     }
     catch (const std::exception &e)
     {
@@ -68,7 +68,7 @@ int main()
 
     try
     {
-        g.loadGraph(graph3, true); // Load the graph to the object.
+        g.loadGraph(graph3); // Load the graph to the object.
     }
     catch (const std::exception &e)
     {
@@ -90,7 +90,7 @@ int main()
         {0, 0, 0, 5}};
     try
     {
-        g.loadGraph(graph4, true); // Load the graph to the object.
+        g.loadGraph(graph4); // Load the graph to the object.
     }
     catch (const std::invalid_argument &e)
     {
