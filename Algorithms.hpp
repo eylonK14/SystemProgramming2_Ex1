@@ -13,8 +13,8 @@ namespace ariel
             static std::string negativeCycle(ariel::Graph);
 
         private:
-            static std::string BellmanFord(ariel::Graph, int, std::vector<int>, std::vector<int>);
-            static void relax(std::pair<std::pair<int, int>, int>, std::vector<int>, std::vector<int>);
+            static std::string BellmanFord(ariel::Graph, std::size_t, std::vector<std::size_t>, std::vector<std::size_t>);
+            static void relax(std::pair<std::pair<std::size_t, std::size_t>, int>, std::vector<std::size_t>, std::vector<std::size_t>);
 
     };
 }

@@ -2,7 +2,7 @@
 
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 {
-    std::vector<int> distanceList, parentList;
+    std::vector<std::size_t> distanceList, parentList;
     if (BellmanFord(g, start, distanceList, parentList).compare("There are no negative cycles in the graph."))
     {
         std::string path = std::to_string(parentList[end]);
@@ -19,7 +19,7 @@ std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 
 std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
 {
-    std::vector<int> distanceList, parentList;
+    std::vector<std::size_t> distanceList, parentList;
     std::string bellmanFord = BellmanFord(g, 0, distanceList, parentList);
 
     if(bellmanFord.compare("There are no negative cycles in the graph.") == 0)
@@ -31,7 +31,7 @@ std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
     return bellmanFord;
 }
 
-void ariel::Algorithms::relax(std::pair<std::pair<int, int>, int> edge, std::vector<int> distanceList, std::vector<int> parentList)
+void ariel::Algorithms::relax(std::pair<std::pair<std::size_t, std::size_t>, int> edge, std::vector<std::size_t> distanceList, std::vector<std::size_t> parentList)
 {
     if (distanceList[edge.first.first] > distanceList[edge.first.second] + edge.second)
     {
@@ -40,9 +40,9 @@ void ariel::Algorithms::relax(std::pair<std::pair<int, int>, int> edge, std::vec
     }
 }
 
-std::string ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vector<int> distanceList, std::vector<int> parentList)
+std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, std::vector<std::size_t> distanceList, std::vector<std::size_t> parentList)
 {
-    for (int i : g.getVertexs())
+    for (std::size_t i : g.getVertexs())
     {
         distanceList[i] = __INT_MAX__;
         parentList[i] = -1;
@@ -50,7 +50,7 @@ std::string ariel::Algorithms::BellmanFord(ariel::Graph g, int start, std::vecto
 
     distanceList[start] = 0;
 
-    for (int i = 0; i < g.getVertexsSize(); i++)
+    for (std::size_t i = 0; i < g.getVertexsSize(); i++)
     {
         for (const auto &edge : g.getEdges())
         {
