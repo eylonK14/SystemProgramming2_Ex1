@@ -7,7 +7,38 @@ bool ariel::Algorithms::isConnected(ariel::Graph g)
 
 std::string ariel::Algorithms::isContainsCycle(ariel::Graph g)
 {
-    return "isContainsCycle not implemeted";
+    std::vector<bool> ack;
+    if(findCycle(g, ack))
+    {
+        std::cout << "found" << std::endl;
+        bool foundFirst = false;
+        std::string firstNode = "";
+        std::string path = "The cycle is: ";
+
+        for (std::size_t i = 0; i <ack.size(); i++)
+        {
+            if(ack[i])
+            {
+                if(!foundFirst)
+                {
+                    foundFirst = true;
+                    firstNode = std::to_string(i);
+                    path += firstNode;
+                    path += "->";
+                }
+                else
+                {
+                    path += std::to_string(i);
+                    path += "->";
+                }
+            }
+        }
+
+        path += firstNode;
+        return path;
+    }
+
+    return "0";
 }
 
 std::string ariel::Algorithms::isBipartite(ariel::Graph g)
@@ -88,6 +119,54 @@ std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
 
     std::reverse(bellmanFord.begin(), bellmanFord.end());
     return bellmanFord;
+}
+
+bool ariel::Algorithms::findCycle(ariel::Graph g, std::vector<bool> &ack)
+{
+    std::vector<bool> visited;
+    std::set<std::pair<std::size_t, std::size_t>> usedEdges;
+
+    for (long i = 0; i < g.getVertexsSize(); i++)
+    {
+        visited.insert(visited.begin() + i, false);
+        ack.insert(ack.begin() + i, false);
+    }
+
+    for (std::size_t i = 0; i < g.getVertexsSize(); i++)
+    {
+        if(!visited[i] && cycleIteration(g, i, usedEdges, visited, ack))
+            return true;
+    }
+
+    return false;
+}
+
+bool ariel::Algorithms::cycleIteration(ariel::Graph g, std::size_t v, std::set<std::pair<std::size_t, std::size_t>>& usedEdges
+, std::vector<bool> &visited, std::vector<bool> &ack)
+{
+    if (!visited[v])
+    {
+        visited[v] = true;
+        ack[v] = true;
+    }
+
+    for (auto &edge : g.getEdges())
+    {
+        if (edge.first.first == v && (usedEdges.find(edge.first)== usedEdges.end())
+        && usedEdges.find(std::make_pair(edge.first.second, edge.first.first)) == usedEdges.end())
+        {
+            usedEdges.insert(edge.first);
+            usedEdges.insert(std::make_pair(edge.first.second, edge.first.first));
+
+            if (!visited[edge.first.second] && cycleIteration(g, edge.first.second, usedEdges, visited, ack))
+                return true;
+            else if (ack[edge.first.second])
+                return true;
+        }
+    }
+
+    ack[v] = false;
+    return false;
 }
 
 bool ariel::Algorithms::isBipartite(ariel::Graph g, int start, std::vector<int> &color)
