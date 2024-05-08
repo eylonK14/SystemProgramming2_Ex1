@@ -18,7 +18,6 @@ void ariel::Graph::loadGraph(std::vector<std::vector<int>> matrix)
         {
             if (matrix[i][j] != 0)
             {
-
                 std::pair<std::size_t, std::size_t> key = std::make_pair(i, j);
                 this->_edges[key] = matrix[i][j];
             }

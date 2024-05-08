@@ -96,4 +96,19 @@ int main()
     {
         cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
     }
+
+    vector<vector<int>> graph5 = {
+        {0, 1, -4},
+        {-2, 0, 3},
+        {4, -3, 0}};
+    try
+    {
+        g.loadGraph(graph5); // Load the graph to the object.
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
+    cout << Algorithms::negativeCycle(g) << endl;
 }

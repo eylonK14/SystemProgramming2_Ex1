@@ -7,12 +7,12 @@ bool ariel::Algorithms::isConnected(ariel::Graph g)
 
 std::string ariel::Algorithms::isContainsCycle(ariel::Graph g)
 {
-    return "";
+    return "isContainsCycle not implemeted";
 }
 
 std::string ariel::Algorithms::isBipartite(ariel::Graph g)
 {
-    return "";
+    return "isBipartite not implemeted";
 }
 
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
@@ -78,7 +78,6 @@ std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, st
     }
 
     distanceList[start] = 0;
-    std::cout << distanceList[start] << std::endl;
 
     for (std::size_t i = 0; i < g.getVertexsSize() - 1; i++)
     {
@@ -95,12 +94,14 @@ std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, st
             std::size_t father = edge.first.first;
             std::string path = std::to_string(father);
             std::size_t i = parentList[father];
+            bool flag = true;
 
-            while (i != father)
+            while (flag)
             {
                 path += ">-";
-                path += std::to_string(parentList[i]);
+                path += std::to_string(i);
                 i = parentList[i];
+                flag = !(i == parentList[father]);
             }
 
             return path;
