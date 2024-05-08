@@ -12,7 +12,37 @@ std::string ariel::Algorithms::isContainsCycle(ariel::Graph g)
 
 std::string ariel::Algorithms::isBipartite(ariel::Graph g)
 {
-    return "isBipartite not implemeted";
+    std::vector<int> color;
+    if (isBipartite(g, 0, color))
+    {
+        std::string firstGroup = "{";
+        std::string secondGroup = "{";
+        for (std::size_t i = 0; i < color.size(); i++)
+        {
+            if (color[i] == 1)
+            {
+                firstGroup += std::to_string(i);
+                firstGroup += ", ";
+            }
+            else if (color[i] == -1)
+            {
+                secondGroup += std::to_string(i);
+                secondGroup += ", ";
+            }
+        }
+
+        firstGroup.pop_back();
+        firstGroup.pop_back();
+
+        secondGroup.pop_back();
+        secondGroup.pop_back();
+
+        firstGroup.push_back('}');
+        secondGroup.push_back('}');
+
+        return "The graph is bipartite: A=" + firstGroup + ", B=" + secondGroup + ".";
+    }
+    return "0";
 }
 
 std::string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
@@ -58,6 +88,46 @@ std::string ariel::Algorithms::negativeCycle(ariel::Graph g)
 
     std::reverse(bellmanFord.begin(), bellmanFord.end());
     return bellmanFord;
+}
+
+bool ariel::Algorithms::isBipartite(ariel::Graph g, int start, std::vector<int> &color)
+{
+    std::size_t s = static_cast<std::size_t>(start);
+    std::queue<std::size_t> q;
+
+    for (long i = 0; i < g.getVertexs().size(); i++)
+    {
+        color.insert(color.begin() + i, 0);
+    }
+
+    color[s] = 1;
+    q.push(s);
+
+    while (!q.empty())
+    {
+        std::size_t ver = q.front();
+        q.pop();
+
+        for (const auto &edge : g.getEdges())
+        {
+            if (edge.first.first == ver)
+            {
+                std::size_t secVer = edge.first.second;
+                if (color[secVer] == 0)
+                {
+                    if (color[ver] == 1)
+                        color[secVer] = -1;
+                    else
+                        color[secVer] = 1;
+                    q.push(secVer);
+                }
+                else if (color[ver] == color[secVer])
+                    return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void ariel::Algorithms::relax(std::pair<std::pair<std::size_t, std::size_t>, int> edge, std::vector<int> &distanceList, std::vector<std::size_t> &parentList)
