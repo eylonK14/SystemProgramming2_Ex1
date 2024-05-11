@@ -111,4 +111,5 @@ int main()
     }
 
     cout << Algorithms::negativeCycle(g) << endl;
+    cout << Algorithms::isContainsCycle(g) << endl;
 }

@@ -26,6 +26,8 @@ valgrind: demo test
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@  # Use implicit rule
 
+.PHONY: clean all
+
 clean:
 	rm -f *.o demo test
 
