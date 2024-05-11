@@ -2,6 +2,9 @@
 
 void ariel::Graph::loadGraph(std::vector<std::vector<int>> matrix)
 {
+    this->_vertexs.clear();
+    this->_edges.clear();
+    
     for (std::size_t i = 0; i < matrix.size(); i++)
     {
         if (matrix[i].size() != matrix.size())
