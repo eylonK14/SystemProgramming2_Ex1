@@ -22,6 +22,9 @@ TEST_CASE("Test isConnected")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK(ariel::Algorithms::isConnected(g) == false);
+    vector<vector<int>> graph3 = {{0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::isConnected(g) == true);
 }
 
 TEST_CASE("Test shortestPath")
@@ -42,6 +45,7 @@ TEST_CASE("Test shortestPath")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "-1");
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 0) == "0");
 
     vector<vector<int>> graph5 = {
         {0, 1, -4},
@@ -49,6 +53,19 @@ TEST_CASE("Test shortestPath")
         {4, -3, 0}};
     g.loadGraph(graph5);
     CHECK(ariel::Algorithms::shortestPath(g, 0, 2) == "-1");
+
+    vector<vector<int>> graph4 = {
+        {0, 1, 0, 0, 0},
+        {1, 0, 3, 0, 0},
+        {0, 3, 0, 4, 0},
+        {0, 0, 4, 0, 5},
+        {0, 0, 0, 5, 0}};
+    g.loadGraph(graph4);
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "0->1->2->3->4");
+
+    vector<vector<int>> graph3 = {{0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 0) == "0");
 }
 TEST_CASE("Test isContainsCycle")
 {
@@ -75,6 +92,10 @@ TEST_CASE("Test isContainsCycle")
         {4, -3, 0}};
     g.loadGraph(graph5);
     CHECK(ariel::Algorithms::isContainsCycle(g) == "The cycle is: 0->1->2->0");
+
+    vector<vector<int>> graph3 = {{0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::isContainsCycle(g) == "0");
 }
 TEST_CASE("Test isBipartite")
 {

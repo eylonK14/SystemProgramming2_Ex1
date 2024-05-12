@@ -2,17 +2,18 @@
 
 bool ariel::Algorithms::isConnected(ariel::Graph g)
 {
-    std::vector<bool> visited;
-    //std::set<std::pair<std::size_t, std::size_t>> usedEdges;
+    std::vector<std::size_t> visited = {};
 
-    for (long i = 0; i < g.getVertexsSize(); i++)
+    for (std::size_t v : g.getVertexs())
     {
-        visited.insert(visited.begin() + i, false);
+        bfs(g, v, visited);
+        if(g.getVertexsSize() == visited.size())
+            return true;
+
+        visited.clear();
     }
 
-    dfsVisit(g, 0, visited);
-
-    return true;
+    return false;
 }
 
 std::string ariel::Algorithms::isContainsCycle(ariel::Graph g)
@@ -273,18 +274,44 @@ std::string ariel::Algorithms::BellmanFord(ariel::Graph g, std::size_t start, st
     return "There are no negative cycles in the graph.";
 }
 
-void ariel::Algorithms::dfsVisit(ariel::Graph g, std::size_t v, std::vector<bool> &visited)
+void ariel::Algorithms::bfs(ariel::Graph &g, std::size_t s, std::vector<std::size_t> &visited)
 {
-    visited[v] = true;
-
-    for (const auto &edge : g.getEdges())
+    std::vector<int> color;
+    std::vector<int> distance;
+     for (long v = 0; v < g.getVertexs().size(); v++)
     {
-        if (edge.first.first == v)
-        {
-            std::size_t secVer = edge.first.second;
+        color.insert(color.begin() + v, -1);
+        distance.insert(distance.begin() + v, __INT_MAX__);
+    }
 
-            if (!visited[secVer])
-                dfsVisit(g, secVer, visited);
+    color[s] = 0;
+    distance[s] = 0;
+    visited.push_back(s);
+
+    std::queue<std::size_t> q;
+    q.push(s);
+
+    while (!q.empty())
+    {
+        std::size_t u = q.front();
+        q.pop();
+
+        for (const auto &edge : g.getEdges())
+        {
+            std::size_t ver = edge.first.first;
+            if (ver == s)
+            {
+                std::size_t secVer = edge.first.second;
+                if(color[secVer] == -1)
+                {
+                    color[secVer] = 0;
+                    visited.push_back(secVer);
+                    distance[secVer] = distance[u] + 1;
+                    q.push(secVer);
+                }
+            }
         }
+
+        color[u] = 1;
     }
 }
